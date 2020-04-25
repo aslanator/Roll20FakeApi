@@ -1,0 +1,20 @@
+{
+    "name": "Getting Started Example",
+    "version": "1.0",
+    "description": "Build an Extension!",
+    "permissions": ["storage", "tabs", "webNavigation", "webRequest", "webRequestBlocking", "https://app.roll20.net/*"],
+    "content_scripts": [{
+        "js": ["inject.js"],
+        "run_at": "document_end",
+        "matches": ["https://app.roll20.net/*"],
+        "all_frames": true
+    }],
+    "web_accessible_resources": [
+        "app.js"
+    ],
+    "background": {
+        "scripts": ["background.js"], 
+        "persistent": true
+    },
+    "manifest_version": 2
+  }
