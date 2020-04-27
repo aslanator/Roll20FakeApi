@@ -7,7 +7,6 @@ function start(){
     console.log("AVAILABLE!");
     let firebaseEvents = new FirebaseEvents();
     firebaseEvents.initChatEvents();
-    firebaseEvents.sendToChat();
 }
 console.log("START!");
 function whenAvailable(name, callback) {
@@ -16,12 +15,12 @@ function whenAvailable(name, callback) {
         if (window[name]) {
             callback(window[name]);
         } else {
-            window.setTimeout(arguments.callee, interval);
+            window.setTimeout(whenAvailable.bind(null, name, callback), interval);
         }
     }, interval);
 }
 
-whenAvailable('Firebase', start);
+whenAvailable('currentPlayer', start);
 
 //players
 //characters

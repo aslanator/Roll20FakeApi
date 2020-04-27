@@ -1,4 +1,6 @@
 import dispatchOnEvent from "../on/dispatchOnEvent";
+import d20 from "../d20/d20";
+import { GENERAL_MESSAGE_TYPE, ROLLRESULT_MESSAGE_TYPE } from '../chat/const';
 
 let firebase;
 
@@ -17,18 +19,35 @@ class FirebaseEvents {
         });
     }
 
-    sendToChat(){
-        let message = {
-            avatar: "/users/avatar/161928/30",
-            content: "/r 3d6",
-            inlinerolls: [],
-            playerid: "-LqNI8VgrmhbnpFUiH-8",
-            type: "general",
-            who: "Аслан (GM)",
-        };
-        let firebaseChat = firebase.child("chat");
-        let chatKey = firebaseChat.push().key();
-        firebaseChat.child(chatKey).setWithPriority(message, Firebase.ServerValue.TIMESTAMP)
+    async sendToChat(speakingAs, command, callback){
+        let message;
+        for(let line of command){
+            switch(line.type){
+                case ROLLRESULT_MESSAGE_TYPE:
+                    message = {
+                        who: speakingAs,
+                        type: line.type,
+                        content: line.json,
+                        signature: line.signature,
+                        avatar: "/users/avatar/161928/30",
+                        playerid: window.currentPlayer.id,
+                        timestamp: (new Date).getTime()
+                    };
+                    break;
+                case GENERAL_MESSAGE_TYPE:
+                    message = {
+                        who: speakingAs,
+                        type: line.type,
+                        content: line.text,
+                        avatar: "/users/avatar/161928/30",
+                    };
+                    break;
+            }
+    
+            let firebaseChat = firebase.child("chat");
+            let chatKey = firebaseChat.push().key();
+            firebaseChat.child(chatKey).setWithPriority(message, Firebase.ServerValue.TIMESTAMP)
+        }
     }
 }
 
