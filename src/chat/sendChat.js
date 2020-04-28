@@ -3,6 +3,10 @@ import d20 from '../d20/d20';
 import { GENERAL_MESSAGE_TYPE, ROLLRESULT_MESSAGE_TYPE } from './const';
 
 class SendChatHelper {
+
+    getHtmlContentByRollResultJson(rollResult){
+        return d20ext.dice_formatter.getHtmlForResult(JSON.parse(rollResult))
+    }
     
     async getCommand(input){
         let rollRegexp = new RegExp(/\/((roll)|(r)|(gmroll)|(gr))[ ]+/i);
@@ -13,6 +17,8 @@ class SendChatHelper {
             command = command.map((item) => {
                 item.origRoll = origRoll;
                 item.type = ROLLRESULT_MESSAGE_TYPE;
+                item.htmlcontent = this.getHtmlContentByRollResultJson(item.json);
+                item._fbid = item.key;
                 return item;
             });
         }

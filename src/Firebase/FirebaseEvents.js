@@ -27,11 +27,14 @@ class FirebaseEvents {
                     message = {
                         who: speakingAs,
                         type: line.type,
+                        htmlcontent: line.htmlcontent,
                         content: line.json,
+                        origRoll: line.origRoll,
                         signature: line.signature,
                         avatar: "/users/avatar/161928/30",
                         playerid: window.currentPlayer.id,
-                        timestamp: (new Date).getTime()
+                        timestamp: (new Date).getTime(),
+                        _fbid: line._fbid,
                     };
                     break;
                 case GENERAL_MESSAGE_TYPE:
@@ -43,7 +46,7 @@ class FirebaseEvents {
                     };
                     break;
             }
-    
+            //Roll final tempalte func - 3112 i += r.call(e[s], o, s, e, r)
             let firebaseChat = firebase.child("chat");
             let chatKey = firebaseChat.push().key();
             firebaseChat.child(chatKey).setWithPriority(message, Firebase.ServerValue.TIMESTAMP)
